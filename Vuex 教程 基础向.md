@@ -19,10 +19,14 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 ```
 
+_场景：用户登录 => 获取用户信息 userInfo => 多个组件共享_
+
 ### 项目结构
 
 ```
-├── // root
+├── components
+│   ├── Sidebar.vue
+│   └── ...
 └── store
     ├── modules
     │   ├── login.js      # 登录模块
@@ -44,19 +48,60 @@ const modulesFiles = require.context('./modules', true, /\.js$/)
 // you do not need `import app from './modules/app'`
 // it will auto require all vuex module from modules file
 const modules = modulesFiles.keys().reduce((modules, modulePath) => {
-	// set './app.js' => 'app'
-	const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
-	const value = modulesFiles(modulePath)
-	modules[moduleName] = value.default
-	return modules
+  // set './app.js' => 'app'
+  const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
+  const value = modulesFiles(modulePath)
+  modules[moduleName] = value.default
+  return modules
 }, {})
 
 export default {
-	modules,
-	getters,
+  modules,
+  getters,
 }
 ```
 
-### refs
+### 核心概念
+
+- State
+
+```js
+// store/modules/login.js
+
+const state = {
+  // 调用 getStorageSync 实现登录态持久化
+  userInfo: getStorageSync('userInfo') || {
+    id: '', // 用户id
+    // ...
+  },
+}
+
+export default {
+  namespaced: true, // 命名空间
+  state,
+}
+```
+
+```vue
+// components/Sidebar.vue
+
+<template>
+  <div v-text="userInfo.id" />
+</template>
+
+<script>
+// 引入 mapState 辅助函数
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    // 映射 this.userInfo 为 store.state.login.userInfo
+    ...mapState('login', ['userInfo']),
+  },
+}
+</script>
+```
+
+### ref
 
 [官方文档](https://vuex.vuejs.org/zh/guide/)
