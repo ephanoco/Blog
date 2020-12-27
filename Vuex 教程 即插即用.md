@@ -114,7 +114,7 @@ const getters = {
   username: state => {
     const { username } = state.login.userInfo
     return username.length > 6 ? `${username.substr(0, 6)}...` : username
-	},
+  },
 }
 
 export default getters
