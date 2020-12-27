@@ -21,8 +21,6 @@ Vue.use(Vuex)
 
 ### 项目结构
 
-_以下代码为实际项目开发中用到的 登录 与 支付 模块。_
-
 ```
 ├── // root
 └── store
@@ -30,8 +28,33 @@ _以下代码为实际项目开发中用到的 登录 与 支付 模块。_
     │   ├── login.js      # 登录模块
     │   └── pay.js        # 支付模块
     ├── getters.js
-    ├── index.js          # 入口
+    ├── index.js          # entry
     └── mutation-types.js
+```
+
+```js
+// index.js
+
+import getters from './getters'
+
+// 自动引入 modules 目录下的模块 ref: vue-element-admin
+// https://webpack.js.org/guides/dependency-management/#requirecontext
+const modulesFiles = require.context('./modules', true, /\.js$/)
+
+// you do not need `import app from './modules/app'`
+// it will auto require all vuex module from modules file
+const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+	// set './app.js' => 'app'
+	const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
+	const value = modulesFiles(modulePath)
+	modules[moduleName] = value.default
+	return modules
+}, {})
+
+export default {
+	modules,
+	getters,
+}
 ```
 
 ### refs
