@@ -21,21 +21,17 @@ Vue.use(Vuex)
 
 ### 项目结构
 
+_以下代码为实际项目开发中用到的 登录 与 支付 模块。_
+
 ```
-├── index.html
-├── main.js
-├── api
-│   └── ... # 抽取出API请求
-├── components
-│   ├── App.vue
-│   └── ...
+├── // root
 └── store
-    ├── index.js          # 我们组装模块并导出 store 的地方
-    ├── actions.js        # 根级别的 action
-    ├── mutations.js      # 根级别的 mutation
-    └── modules
-        ├── cart.js       # 购物车模块
-        └── products.js   # 产品模块
+    ├── modules
+    │   ├── login.js      # 登录模块
+    │   └── pay.js        # 支付模块
+    ├── getters.js
+    ├── index.js          # 入口
+    └── mutation-types.js
 ```
 
 ### refs
