@@ -8,9 +8,7 @@
 npm i vuex -S
 ```
 
-不同框架或平台，引入方式有些许不同：
-
-- Vue CLI
+### 引入
 
 ```js
 // main.js
@@ -21,12 +19,21 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 ```
 
-- 360小程序
+### 项目结构
 
-```json
-// app.json
-
-{
-	"store": "store/index.js"
-}
+```
+├── index.html
+├── main.js
+├── api
+│   └── ... # 抽取出API请求
+├── components
+│   ├── App.vue
+│   └── ...
+└── store
+    ├── index.js          # 我们组装模块并导出 store 的地方
+    ├── actions.js        # 根级别的 action
+    ├── mutations.js      # 根级别的 mutation
+    └── modules
+        ├── cart.js       # 购物车模块
+        └── products.js   # 产品模块
 ```
