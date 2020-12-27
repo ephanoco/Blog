@@ -72,6 +72,7 @@ const state = {
   // 调用 getStorageSync 实现登录态持久化
   userInfo: getStorageSync('userInfo') || {
     id: '', // 用户id
+    username: '', // 用户名称
     // ...
   },
 }
@@ -97,6 +98,42 @@ export default {
   computed: {
     // 映射 this.userInfo 为 store.state.login.userInfo
     ...mapState('login', ['userInfo']),
+  },
+}
+</script>
+```
+
+- Getter
+
+多个组件存在相同的依赖于 state 的计算属性，避免冗余，将其抽离到 getter 中：
+
+```js
+// store/getters.js
+
+const getters = {
+  username: state => {
+    const { username } = state.login.userInfo
+    return username.length > 6 ? `${username.substr(0, 6)}...` : username
+	},
+}
+
+export default getters
+```
+
+```vue
+// components/Sidebar.vue
+
+<template>
+  <div v-text="username" />
+</template>
+
+<script>
+// 引入 mapGetters 辅助函数
+import { mapGetters } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters(['username']),
   },
 }
 </script>
