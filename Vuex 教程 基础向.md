@@ -37,3 +37,7 @@ Vue.use(Vuex)
         ├── cart.js       # 购物车模块
         └── products.js   # 产品模块
 ```
+
+### refs
+
+[官方文档](https://vuex.vuejs.org/zh/guide/)
