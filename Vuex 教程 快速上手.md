@@ -1,7 +1,3 @@
-### 前言
-
-笔者认为，官方文档无疑是介绍最详细，表述最精准的参考。但对小白来说未免有点晦涩，本文意在以更直观的方式帮助开发者快速上手 Vuex。
-
 ### 安装
 
 ```
@@ -109,7 +105,7 @@ export default {
 
 - Getter
 
-多个组件存在相同的依赖于 state 的计算属性，避免冗余，将其抽离到 getter 中：
+多个组件存在相同的依赖于 state 的计算属性，抽取到 getter 中，实现复用：
 
 ```js
 // store/getters.js
@@ -132,7 +128,6 @@ export default getters
 </template>
 
 <script>
-// 引入 mapGetters 辅助函数
 import { mapGetters } from 'vuex'
 
 export default {
@@ -219,7 +214,7 @@ const actions = {
         })
       })
   },
-  // 在支付模块中同样需要调用 getUserInfo，因此将其注册到全局，改写如下：
+  // 注册全局 action
   getUserInfo: {
     root: true,
     async handler({ state, commit }) { ... },
@@ -235,7 +230,7 @@ export default {
 ```
 
 ```js
-// store/modules/login.js
+// store/modules/pay.js
 
 const actions = {
   // 查询是否支付成功
