@@ -36,6 +36,8 @@ _场景：用户登录 => 获取用户信息 userInfo => 多个组件共享_
     └── mutation-types.js
 ```
 
+_tip: 建议以 功能 划分模块_
+
 ```js
 // store/index.js
 
@@ -214,7 +216,7 @@ const actions = {
         })
       })
   },
-  // 注册全局 action
+  // 注册全局 action, 使支付模块也能访问 getUserInfo
   getUserInfo: {
     root: true,
     async handler({ state, commit }) { ... },
@@ -266,3 +268,7 @@ export default {
 ### ref
 
 [官方文档](https://vuex.vuejs.org/zh/guide/)
+
+### opinion
+
+笔者只是贴出真实项目中自认为较为舒服的写法，更多细节及api参见官网，不恰之处，多多指正。
