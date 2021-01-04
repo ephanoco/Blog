@@ -139,6 +139,56 @@ export default {
 </script>
 ```
 
+- Mutation
+
+通过提交 mutation 的方式更改状态：
+
+```js
+// store/mutation-types.js
+
+// 使用常量替代 mutation 事件类型
+export const SET_USER_INFO = 'SET_USER_INFO'
+```
+
+```js
+// store/modules/login.js
+
+import { SET_USER_INFO } from '../mutation-types'
+
+const state = { ... }
+
+const mutations = {
+  // 第二个参数为额外参数（可选）
+  [SET_USER_INFO](state, info) {
+    state.userInfo = info
+    setStorageSync('userInfo', info) // 登录态持久化
+  },
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+}
+```
+
+_tip: mutation 必须是同步函数_
+
+```vue
+<script>
+import { mapMutations } from 'vuex'
+import { SET_USER_INFO } from '../../store/mutation-types'
+
+export default {
+  methods: {
+    ...mapMutations([
+      `login/${SET_USER_INFO}`, // -> this[`login/${SET_USER_INFO}`](info)
+    ]),
+  },
+}
+</script>
+```
+
 ### ref
 
 [官方文档](https://vuex.vuejs.org/zh/guide/)
