@@ -24,7 +24,11 @@ _场景：用户登录 => 获取用户信息 userInfo => 多个组件共享_
 ### 项目结构
 
 ```
+├── api
+│   ├── login.js
+│   └── ...
 ├── components
+│   ├── Layout.vue
 │   ├── Sidebar.vue
 │   └── ...
 └── store
@@ -184,6 +188,81 @@ export default {
     ...mapMutations([
       `login/${SET_USER_INFO}`, // -> this[`login/${SET_USER_INFO}`](info)
     ]),
+  },
+}
+</script>
+```
+
+- Action
+
+```js
+// store/modules/login.js
+
+import { SET_USER_INFO } from '../mutation-types'
+import * as api from '../../api/login'
+
+const state = { ... }
+
+const mutations = { ... }
+
+const actions = {
+  // 获取用户信息
+  async getUserInfo({ state, commit }) {
+    await api
+      .getUserInfo({ ... })
+      .then(response => {
+        const { id, username, ... } = response.data
+        commit(SET_USER_INFO, {
+          id,
+          username,
+          // ...
+        })
+      })
+  },
+  // 在支付模块中同样需要调用 getUserInfo，因此将其注册到全局，改写如下：
+  getUserInfo: {
+    root: true,
+    async handler({ state, commit }) { ... },
+  },
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions,
+}
+```
+
+```js
+// store/modules/login.js
+
+const actions = {
+  // 查询是否支付成功
+  async polling({ dispatch }) {
+    // ...
+    dispatch('getUserInfo', null, { root: true })
+  },
+}
+
+export default {
+  // ...
+  actions,
+}
+```
+
+```vue
+// components/Layout.vue
+
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+  created() {
+    this.getUserInfo()
+  },
+  methods: {
+    ...mapActions(['getUserInfo']),
   },
 }
 </script>
