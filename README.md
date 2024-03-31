@@ -1,4 +1,4 @@
-# blog
+# Blog
 
 A dedicated repo is used to store personal blog posts.
 
